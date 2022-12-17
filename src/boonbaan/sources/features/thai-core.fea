@@ -1,0 +1,186 @@
+languagesystem DFLT dflt;
+languagesystem thai dflt;
+languagesystem thai PAL ;
+languagesystem thai SAN ;
+
+#
+# Copyright (c) 2014-2015, Sungsit Sawaiwan (https://sungsit.com | gibbozer [at] gmail [dot] com).
+#
+# This Font Software is licensed under the SIL Open Font License, Version 1.1 (OFL).
+# You should have received a copy of the OFL License along with this file.
+# If not, see http://scripts.sil.org/OFL
+#
+
+# Shared functionalities for Thai shaping
+
+include(thai-classes.fea)
+
+# Basic subsitutions
+
+# Remove descender
+lookup ThaiRC.rd {
+  sub @RC by @RC.rd;
+} ThaiRC.rd;
+
+lookup ThaiContextRC.rd {
+  sub @RC'lookup ThaiRC.rd @BV;
+} ThaiContextRC.rd;
+
+lookup Thai.sd {
+  sub @T by @T.sd;
+} Thai.sd;
+
+lookup ThaiBV.sd {
+  sub @BV by @BV.sd;
+} ThaiBV.sd;
+
+lookup Thai.sdl {
+  sub @T by @T.sdl;
+} Thai.sdl;
+
+lookup Thai.sl {
+  sub @T by @T.sl;
+  sub @AV by @AV.sl;
+} Thai.sl;
+
+lookup Thai.su {
+  sub \uni0E47 by \uni0E47.su;
+  sub \uni0E4D by \uni0E4D.su;
+  sub @T.sd by @T;
+} Thai.su;
+
+lookup Thai.sul {
+  sub \uni0E47 by \uni0E47.sul;
+  sub \uni0E4D by \uni0E4D.sul;
+  sub @T by @T.sl;
+} Thai.sul;
+
+# Thai Sara Am decomposition (Don't include any zero-width space here, it causes Mac OS bug) 
+lookup ThaiDecomp {
+  sub \uni0E33 by \uni0E4D \uni0E32;
+} ThaiDecomp;
+
+# Phinthu reordering fix for Uniscribe & Harfbuzz
+lookup ThaiBV.0E3A {
+  sub [ \uni0E38 \uni0E39 ] by \uni0E3A;
+  sub [ \uni0E38.sd \uni0E39.sd ] by \uni0E3A.sd;
+} ThaiBV.0E3A;
+
+lookup Thai0E3A.0E38 {
+  sub [ \uni0E3A \uni0E3A.sd ] by [ \uni0E38 \uni0E38.sd ];
+} Thai0E3A.0E38;
+
+lookup Thai0E3A.0E39 {
+  sub [ \uni0E3A \uni0E3A.sd ] by [ \uni0E39 \uni0E39.sd ];
+} Thai0E3A.0E39;
+
+lookup ThaiPhinthu.ro {
+  sub [ \uni0E38 \uni0E38.sd ]'lookup ThaiBV.0E3A [ \uni0E3A \uni0E3A.sd ]'lookup Thai0E3A.0E38;
+  sub [ \uni0E39 \uni0E39.sd ]'lookup ThaiBV.0E3A [ \uni0E3A \uni0E3A.sd ]'lookup Thai0E3A.0E39;
+} ThaiPhinthu.ro;
+
+@BASE.nc = [ @NC @RC.rd @LV \uni0E30 \uni0E32 \uni0E2B0E19.liga \uni0EDD ];
+@BASE.dc = [ @DC @RC @IV \uni0E45 ];
+@AM = [ \uni0E33 ];
+@AV.opt  = [ \uni0E47 \uni0E4D ];
+
+lookup ThaiContextAC {
+  lookupflag 0;
+
+  sub @AC @BV @BV @AV'lookup Thai.sl @T'lookup Thai.sl;
+  sub @AC @BV @BV @AV'lookup Thai.sl @AV.opt'lookup Thai.sul;
+  sub @AC @BV @BV @T'lookup Thai.sdl;
+  sub @AC @BV @BV @AV'lookup Thai.sl;
+  sub @AC @BV @AV'lookup Thai.sl @T'lookup Thai.sl;
+  sub @AC @BV @AV'lookup Thai.sl @AV.opt'lookup Thai.sul;
+  sub @AC @BV @T'lookup Thai.sdl;
+  sub @AC @BV @AV'lookup Thai.sl;
+
+  sub @AC @AV'lookup Thai.sl @T'lookup Thai.sl;
+  sub @AC @AV'lookup Thai.sl @AV.opt'lookup Thai.sul;
+  sub @AC @T'lookup Thai.sdl @T'lookup Thai.sl;
+  sub @AC @T'lookup Thai.sdl;
+  sub @AC @AV'lookup Thai.sl;
+
+  sub [ @AV.sul @AV.sl @T.sdl @T.sl ] @AV.opt'lookup Thai.sul;
+  sub [ @AV.sul @AV.sl @T.sdl @T.sl ] @T'lookup Thai.sl;
+
+} ThaiContextAC;
+
+lookup ThaiContextDC {
+  lookupflag 0;
+
+  sub @BASE.dc @BV'lookup ThaiBV.sd @BV @AV @AV'lookup Thai.su;
+  sub @BASE.dc @BV'lookup ThaiBV.sd @BV @T'lookup Thai.sd;
+  sub @BASE.dc @BV'lookup ThaiBV.sd @AV @AV'lookup Thai.su;
+  sub @BASE.dc @BV'lookup ThaiBV.sd @T'lookup Thai.sd;
+  sub @BASE.dc @AV @AV'lookup Thai.su;
+  sub @BASE.dc @T'lookup Thai.sd;
+
+  sub @BASE.dc @BV'lookup ThaiBV.sd;
+
+} ThaiContextDC;
+
+lookup ThaiContextNC {
+  lookupflag 0;
+
+  sub @BASE.nc @BV @BV @AV @AV'lookup Thai.su;
+  sub @BASE.nc @BV @BV @T'lookup Thai.sd;
+  sub @BASE.nc @BV @AV @AV'lookup Thai.su;
+  sub @BASE.nc @BV @T'lookup Thai.sd;
+  sub @BASE.nc @AV @AV'lookup Thai.su;
+  sub @BASE.nc @T'lookup Thai.sd;
+
+  sub [ @AV.su @T.sd @T ] @AV'lookup Thai.su;
+
+} ThaiContextNC;
+
+# Mac OS & Safari fix
+lookup ThaiTone.liga {
+  sub \uni0E48.sd \uni0E4D by \uni0EC8.0ECD;
+  sub \uni0E48.sd \uni0E4D.su by \uni0EC8.0ECD;
+  sub \uni0E49.sd \uni0E4D by \uni0EC9.0ECD;
+  sub \uni0E49.sd \uni0E4D.su by \uni0EC9.0ECD;
+  sub \uni0E4A.sd \uni0E4D by \uni0ECA.0ECD;
+  sub \uni0E4A.sd \uni0E4D.su by \uni0ECA.0ECD;
+  sub \uni0E4B.sd \uni0E4D by \uni0ECB.0ECD;
+  sub \uni0E4B.sd \uni0E4D.su by \uni0ECB.0ECD;
+
+  sub \uni0E48.sdl \uni0E4D by \uni0EC8.0ECD.sl;
+  sub \uni0E48.sdl \uni0E4D.sul by \uni0EC8.0ECD.sl;
+  sub \uni0E49.sdl \uni0E4D by \uni0EC9.0ECD.sl;
+  sub \uni0E49.sdl \uni0E4D.sul by \uni0EC9.0ECD.sl;
+  sub \uni0E4A.sdl \uni0E4D by \uni0ECA.0ECD.sl;
+  sub \uni0E4A.sdl \uni0E4D.sul by \uni0ECA.0ECD.sl;
+  sub \uni0E4B.sdl \uni0E4D by \uni0ECB.0ECD.sl;
+  sub \uni0E4B.sdl \uni0E4D.sul by \uni0ECB.0ECD.sl;
+} ThaiTone.liga;
+
+feature locl {
+  script thai;
+    language PAL exclude_dflt;
+      lookup ThaiRC.rd;
+    language SAN exclude_dflt;
+      lookup ThaiRC.rd;
+} locl;
+
+feature ss01 {
+  lookup ThaiRC.rd;
+} ss01;
+
+feature ccmp {
+  lookup ThaiDecomp;
+  lookup ThaiContextRC.rd;
+  lookup ThaiPhinthu.ro;
+  lookup ThaiContextAC;
+  lookup ThaiContextDC;
+  lookup ThaiContextNC;
+  lookup ThaiTone.liga;
+  script thai;
+    language PAL exclude_dflt;
+      lookup ThaiRC.rd;
+    language SAN exclude_dflt;
+      lookup ThaiRC.rd;
+} ccmp;
+
+

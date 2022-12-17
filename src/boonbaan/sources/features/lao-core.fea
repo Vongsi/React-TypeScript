@@ -1,0 +1,137 @@
+languagesystem DFLT dflt;
+languagesystem lao  dflt;
+
+#
+# Copyright (c) 2014-2015, Sungsit Sawaiwan (https://sungsit.com | gibbozer [at] gmail [dot] com).
+#
+# This Font Software is licensed under the SIL Open Font License, Version 1.1 (OFL).
+# You should have received a copy of the OFL License along with this file.
+# If not, see http://scripts.sil.org/OFL
+#
+
+# Shared functionalities for Lao shaping
+
+include(lao-classes.fea)
+
+# Lao Sara Am decomposition (Don't include any zero-width space here, it causes Mac OS bug) 
+lookup LaoDecomp {
+  sub \uni0EB3 by \uni0ECD \uni0EB2;
+} LaoDecomp;
+
+# Basic subsitutions
+
+lookup Lao.sd {
+  sub @T.lao by @T.lao.sd;
+} Lao.sd;
+
+lookup LaoBV.sd {
+  sub @BV.lao by @BV.lao.sd;
+} LaoBV.sd;
+
+lookup Lao.sdl {
+  sub @T.lao by @T.lao.sdl;
+} Lao.sdl;
+
+lookup Lao.sl {
+  sub @T.lao by @T.lao.sl;
+  sub @AV.lao by @AV.lao.sl;
+} Lao.sl;
+
+lookup Lao.su {
+  sub \uni0ECC by \uni0ECC.su;
+  sub \uni0ECD by \uni0ECD.su;
+  sub @T.lao.sd by @T.lao;
+} Lao.su;
+
+lookup Lao.sul {
+  sub \uni0ECC by \uni0ECC.sul;
+  sub \uni0ECD by \uni0ECD.sul;
+  sub @T.lao.sdl by @T.lao.sl;
+} Lao.sul;
+
+
+@BASE.lao.nc = [ @NC.lao @DC2.lao @LV.lao \uni0EB0 \uni0EB2 ];
+@BASE.lao.dc = [ @DC.lao ];
+@AM.lao = [ \uni0EB3 ];
+@AV.lao.opt  = [ \uni0ECC \uni0ECD ];
+
+lookup LaoContextAC {
+  lookupflag 0;
+
+  sub @AC.lao @BV.lao @BV.lao @AV.lao'lookup Lao.sl @T.lao'lookup Lao.sl;
+  sub @AC.lao @BV.lao @BV.lao @AV.lao'lookup Lao.sl @AV.lao.opt'lookup Lao.sul;
+  sub @AC.lao @BV.lao @BV.lao @T.lao'lookup Lao.sdl;
+  sub @AC.lao @BV.lao @BV.lao @AV.lao'lookup Lao.sl;
+  sub @AC.lao @BV.lao @AV.lao'lookup Lao.sl @T.lao'lookup Lao.sl;
+  sub @AC.lao @BV.lao @AV.lao'lookup Lao.sl @AV.lao.opt'lookup Lao.sul;
+  sub @AC.lao @BV.lao @T.lao'lookup Lao.sdl;
+  sub @AC.lao @BV.lao @AV.lao'lookup Lao.sl;
+
+  sub @AC.lao @AV.lao'lookup Lao.sl @T.lao'lookup Lao.sl;
+  sub @AC.lao @AV.lao'lookup Lao.sl @AV.lao.opt'lookup Lao.sul;
+  sub @AC.lao @T.lao'lookup Lao.sdl @T.lao'lookup Lao.sl;
+  sub @AC.lao @T.lao'lookup Lao.sdl;
+  sub @AC.lao @AV.lao'lookup Lao.sl;
+
+  sub [ @AV.lao.sul @AV.lao.sl @T.lao.sdl @T.lao.sl ] @AV.lao.opt'lookup Lao.sul;
+  sub [ @AV.lao.sul @AV.lao.sl @T.lao.sdl @T.lao.sl ] @T.lao'lookup Lao.sl;
+
+} LaoContextAC;
+
+lookup LaoContextDC {
+  lookupflag 0;
+
+  sub @BASE.lao.dc @BV.lao'lookup LaoBV.sd @BV.lao @AV.lao @AV.lao'lookup Lao.su;
+  sub @BASE.lao.dc @BV.lao'lookup LaoBV.sd @BV.lao @T.lao'lookup Lao.sd;
+  sub @BASE.lao.dc @BV.lao'lookup LaoBV.sd @AV.lao @AV.lao'lookup Lao.su;
+  sub @BASE.lao.dc @BV.lao'lookup LaoBV.sd @T.lao'lookup Lao.sd;
+  sub @BASE.lao.dc @AV.lao @AV.lao'lookup Lao.su;
+  sub @BASE.lao.dc @T.lao'lookup Lao.sd;
+
+  sub @BASE.lao.dc @BV.lao'lookup LaoBV.sd;
+
+} LaoContextDC;
+
+lookup LaoContextNC {
+  lookupflag 0;
+
+  sub @BASE.lao.nc @BV.lao @BV.lao @AV.lao @AV.lao'lookup Lao.su;
+  sub @BASE.lao.nc @BV.lao @BV.lao @T.lao'lookup Lao.sd;
+  sub @BASE.lao.nc @BV.lao @AV.lao @AV.lao'lookup Lao.su;
+  sub @BASE.lao.nc @BV.lao @T.lao'lookup Lao.sd;
+  sub @BASE.lao.nc @AV.lao @AV.lao'lookup Lao.su;
+  sub @BASE.lao.nc @T.lao'lookup Lao.sd;
+
+  sub [ @AV.lao.su @T.lao.sd @T.lao ] @AV.lao'lookup Lao.su;
+
+} LaoContextNC;
+
+# Mac OS & Safari fix
+lookup LaoTone.liga {
+  sub \uni0EC8.sd \uni0ECD by \uni0EC8.0ECD;
+  sub \uni0EC8.sd \uni0ECD.su by \uni0EC8.0ECD;
+  sub \uni0EC9.sd \uni0ECD by \uni0EC9.0ECD;
+  sub \uni0EC9.sd \uni0ECD.su by \uni0EC9.0ECD;
+  sub \uni0ECA.sd \uni0ECD by \uni0ECA.0ECD;
+  sub \uni0ECA.sd \uni0ECD.su by \uni0ECA.0ECD;
+  sub \uni0ECB.sd \uni0ECD by \uni0ECB.0ECD;
+  sub \uni0ECB.sd \uni0ECD.su by \uni0ECB.0ECD;
+
+  sub \uni0EC8.sdl \uni0ECD by \uni0EC8.0ECD.sl;
+  sub \uni0EC8.sdl \uni0ECD.sul by \uni0EC8.0ECD.sl;
+  sub \uni0EC9.sdl \uni0ECD by \uni0EC9.0ECD.sl;
+  sub \uni0EC9.sdl \uni0ECD.sul by \uni0EC9.0ECD.sl;
+  sub \uni0ECA.sdl \uni0ECD by \uni0ECA.0ECD.sl;
+  sub \uni0ECA.sdl \uni0ECD.sul by \uni0ECA.0ECD.sl;
+  sub \uni0ECB.sdl \uni0ECD by \uni0ECB.0ECD.sl;
+  sub \uni0ECB.sdl \uni0ECD.sul by \uni0ECB.0ECD.sl;
+} LaoTone.liga;
+
+# Set them all here.
+feature ccmp {
+  lookup LaoDecomp;
+  lookup LaoContextAC;
+  lookup LaoContextDC;
+  lookup LaoContextNC;
+  lookup LaoTone.liga;
+} ccmp;
