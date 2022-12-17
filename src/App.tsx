@@ -75,14 +75,14 @@ function App() {
 
     newTodos[index].isDone = !newTodos[index].isDone;
     setTodos(newTodos);
-    // getFilterTodoList('markTodo');
+    getFilterTodoList('markTodo');
   }
 
   const removeTodo = (id: number) => {
     const newTodos = todos.filter(td => td.id !== id);
     // newTodos.splice(index, 1);
     setTodos(newTodos);
-    // getFilterTodoList('removeTodo');
+    getFilterTodoList('removeTodo');
   }
 
   const changingFilterTodos = (selectedValue: string) => {
