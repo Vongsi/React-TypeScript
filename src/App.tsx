@@ -45,9 +45,11 @@ function App() {
     console.log("Mounting ==> ");
     // changingFilterTodos('Loading ...');
     // getFilterTodoList('useEffect');
+    console.log('filterValue ==> ');
+    console.log(filterValue);
 
     let todosFiltered = [...todos];
-
+    
     if (filterValue === filterAvailable.Active) {
 
       todosFiltered = todos.filter(td => td.isDone === false);
@@ -55,6 +57,7 @@ function App() {
 
       todosFiltered = todos.filter(td => td.isDone === true);
     }
+
     setFilterTodos(todosFiltered);
 
     return () => console.log("Unmounting <<==");
