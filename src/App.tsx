@@ -37,7 +37,7 @@ function App() {
 
   useEffect(() => {
     console.log("Mounting ==> ");
-    getFilterTodoList('useEffect');
+    // getFilterTodoList('useEffect');
 
     return () => console.log("Unmounting <<==");
   }, [todos, filterValue]);
