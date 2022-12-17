@@ -28,6 +28,12 @@ var TodoObject: Todo[] = [];
 // var arr4 = new Array<Todo>();
 // let employees: Array<Todo> = [];
 
+enum filterAvailable {
+  All = 'all',
+  Active = 'active',
+  Inactive = 'inactive'
+}
+
 function App() {
 
   // const [todoText, setTodoText] = useState('');
@@ -37,7 +43,19 @@ function App() {
 
   useEffect(() => {
     console.log("Mounting ==> ");
+    // changingFilterTodos('Loading ...');
     // getFilterTodoList('useEffect');
+
+    let todosFiltered = [...todos];
+
+    if (filterValue === filterAvailable.Active) {
+
+      todosFiltered = todos.filter(td => td.isDone === false);
+    } else if (filterValue === filterAvailable.Inactive) {
+
+      todosFiltered = todos.filter(td => td.isDone === true);
+    }
+    setFilterTodos(todosFiltered);
 
     return () => console.log("Unmounting <<==");
   }, [todos, filterValue]);
@@ -48,11 +66,7 @@ function App() {
     { name: 'Inactive', value: 'inactive', variant: 'outline-danger' },
   ];
 
-  enum filterAvailable {
-    All = 'all',
-    Active = 'active',
-    Inactive = 'inactive'
-  }
+
 
   const addingNewTodo = (newTodoText: string) => {
 
@@ -75,39 +89,39 @@ function App() {
 
     newTodos[index].isDone = !newTodos[index].isDone;
     setTodos(newTodos);
-    getFilterTodoList('markTodo');
+    // getFilterTodoList('markTodo');
   }
 
   const removeTodo = (id: number) => {
     const newTodos = todos.filter(td => td.id !== id);
     // newTodos.splice(index, 1);
     setTodos(newTodos);
-    getFilterTodoList('removeTodo');
+    // getFilterTodoList('removeTodo');
   }
 
   const changingFilterTodos = (selectedValue: string) => {
     setFilterValue(selectedValue);
-    getFilterTodoList('Changing filter ...');
+    // getFilterTodoList('Changing filter ...');
   }
 
-  const getFilterTodoList = (loading: string) => {
+  // const getFilterTodoList = (loading: string) => {
 
-    console.log('loading => ' + loading);
+  //   console.log('loading => ' + loading);
 
-    if (filterValue === filterAvailable.All) {
+  //   if (filterValue === filterAvailable.All) {
 
-      let todosFiltered = [...todos];
-      setFilterTodos(todosFiltered);
-    } else if (filterValue === filterAvailable.Active) {
+  //     let todosFiltered = [...todos];
+  //     setFilterTodos(todosFiltered);
+  //   } else if (filterValue === filterAvailable.Active) {
 
-      let todosFiltered = todos.filter(td => td.isDone === false);
-      setFilterTodos(todosFiltered);
-    } else if (filterValue === filterAvailable.Inactive) {
+  //     let todosFiltered = todos.filter(td => td.isDone === false);
+  //     setFilterTodos(todosFiltered);
+  //   } else if (filterValue === filterAvailable.Inactive) {
 
-      let todosFiltered = todos.filter(td => td.isDone === true);
-      setFilterTodos(todosFiltered);
-    }
-  }
+  //     let todosFiltered = todos.filter(td => td.isDone === true);
+  //     setFilterTodos(todosFiltered);
+  //   }
+  // }
 
   return (
     <div className="app">
