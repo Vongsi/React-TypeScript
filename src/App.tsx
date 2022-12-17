@@ -1,5 +1,5 @@
-import React, { FormEvent, useEffect, useState } from 'react';
-import { Button, ButtonGroup, Card, Form, ListGroup, ToggleButton } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { ButtonGroup, Card, ListGroup, ToggleButton } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './boonbaan/css/boonbaan.css';
 import './App.css';
@@ -13,9 +13,9 @@ interface Todo {
   isDone: boolean
 }
 
-interface dataFormProps {
-  createCard: () => void
-}
+// interface dataFormProps {
+//   createCard: () => void
+// }
 
 // 1. Explicitly declare the type
 var TodoObject: Todo[] = [];
