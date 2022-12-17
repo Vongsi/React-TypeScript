@@ -87,6 +87,7 @@ function App() {
 
   const changingFilterTodos = (selectedValue: string) => {
     setFilterValue(selectedValue);
+    getFilterTodoList('Changing filter ...');
   }
 
   const getFilterTodoList = (loading: string) => {
